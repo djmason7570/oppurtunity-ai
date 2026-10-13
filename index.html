@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpportunityAI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6fc;
+      color: #19233b;
+    }
+    header {
+      background: #28245f;
+      color: white;
+      padding: 24px;
+      text-align: center;
+    }
+    main {
+      max-width: 850px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+    .intro, .opportunity {
+      background: white;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px #17204412;
+    }
+    input, select, button {
+      box-sizing: border-box;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 5px 0;
+    }
+    input, select {
+      border: 1px solid #ccd2e2;
+      width: 100%;
+    }
+    button {
+      background: #5548e8;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .tag {
+      display: inline-block;
+      background: #e9e7ff;
+      color: #393080;
+      padding: 6px 10px;
+      border-radius: 20px;
+      margin: 4px;
+      font-size: 13px;
+    }
+    a { color: #5548e8; }
+    .note { color: #65718a; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OpportunityAI</h1>
+    <p>Discover your next opportunity.</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Find apprenticeships and work experience</h2>
+      <p>Explore opportunities, understand entry requirements and learn about apprenticeship levels.</p>
+
+      <input id="search" type="text"
+        placeholder="Search software, engineering, business...">
+
+      <select id="type">
+        <option value="all">All opportunities</option>
+        <option value="apprenticeship">Apprenticeships</option>
+        <option value="work">Work experience</option>
+      </select>
+
+      <button onclick="searchOpportunities()">Search</button>
+    </section>
+
+    <p id="count"></p>
+    <section id="results"></section>
+
+    <section class="intro">
+      <h2>Apprenticeship levels</h2>
+      <p><strong>Level 2:</strong> Intermediate</p>
+      <p><strong>Level 3:</strong> Advanced</p>
+      <p><strong>Levels 4–5:</strong> Higher</p>
+      <p><strong>Level 6:</strong> Bachelor's degree level</p>
+      <p><strong>Level 7:</strong> Master's degree level</p>
+      <p class="note">Check each official vacancy to confirm its qualification and entry requirements.</p>
+    </section>
+
+    <p class="note">
+      Demo listings only. These examples are not live vacancies.
+      Always check the official employer website for current information.
+    </p>
+  </main>
+
+  <script>
+    const opportunities = [
+      {
+        title: "Software Engineering Apprentice",
+        company: "Example technology employer",
+        type: "apprenticeship",
+        level: 6,
+        skills: "Problem solving, teamwork, coding",
+        description: "A sample degree-level software apprenticeship.",
+        url: "https://www.findapprenticeship.service.gov.uk/apprenticeships"
+      },
+      {
+        title: "Business Management Apprentice",
+        company: "Example national employer",
+        type: "apprenticeship",
+        level: 4,
+        skills: "Communication, organisation, teamwork",
+        description: "A sample apprenticeship focused on business projects.",
+        url: "https://www.findapprenticeship.service.gov.uk/apprenticeships"
+      },
+      {
+        title: "Technology Work Experience",
+        company: "Example technology company",
+        type: "work",
+        level: null,
+        skills: "Curiosity, problem solving, willingness to learn",
+        description: "A sample introduction to technology careers.",
+        url: "https://www.gov.uk/find-work-experience"
+      }
+    ];
+
+    function searchOpportunities() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const type = document.getElementById("type").value;
+
+      const matches = opportunities.filter(item => {
+        const text = (
+          item.title + " " + item.company + " " +
+          item.skills + " " + item.description
+        ).toLowerCase();
+
+        return text.includes(query) &&
+          (type === "all" || item.type === type);
+      });
+
+      document.getElementById("count").textContent =
+        matches.length + " sample opportunities found";
+
+      document.getElementById("results").innerHTML =
+        matches.map(item => `
+          <article class="opportunity">
+            <h2>${item.title}</h2>
+            <p>${item.company}</p>
+            <span class="tag">${
+              item.type === "work"
+                ? "Work experience"
+                : "Apprenticeship"
+            }</span>
+            <span class="tag">${
+              item.level ? "Level " + item.level : "No apprenticeship level"
+            }</span>
+            <p>${item.description}</p>
+            <p><strong>Skills to highlight:</strong> ${item.skills}</p>
+            <p class="note">
+              Check the official listing for grades, age requirements
+              and application deadlines.
+            </p>
+            <a href="${item.url}" target="_blank" rel="noopener">
+              Visit official vacancy search ↗
+            </a>
+          </article>
+        `).join("");
+    }
+
+    searchOpportunities();
+  </script>
+</body>
+</html>
